@@ -75,7 +75,7 @@ All error banners include a **dismiss button** and clear automatically when the 
 ### 1. Clone the repo
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/pantry-chef.git
+git clone https://github.com/timotius-devin/pantry-chef.git
 cd pantry-chef
 ```
 
