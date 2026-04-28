@@ -12,44 +12,6 @@ Pantry Chef is a simple AI-powered recipe generator. You tell it what ingredient
 
 **Example:** type in `chicken, garlic, pasta, cream` and it might return a creamy garlic chicken pasta with a full ingredient list and cooking steps.
 
-### How it works
-
-```
-[Frontend]            [Backend]             [Claude API]
- React+Vite  ──POST──>  FastAPI  ──prompt──>  Anthropic
-   :5174       <──JSON──  :8001   <──JSON──
-```
-
-1. You enter ingredients in the browser
-2. The frontend sends them to the FastAPI backend
-3. The backend crafts a prompt and calls Claude
-4. Claude returns structured JSON with recipes
-5. Recipes are displayed as clean, readable cards
-
-**The API key is stored server-side only** — the browser never sees it. The Vite dev server proxies `/api` requests to the FastAPI backend, so everything stays secure.
-
-### Exhaustive error handling
-
-Every failure mode is handled gracefully — the user never sees a raw stack trace or a generic "something broke" message:
-
-| Scenario | Status | Frontend message |
-|---|---|---|
-| Missing or malformed request body | 400 | Server's detail message |
-| Empty ingredients array | 400 | Please provide at least one ingredient |
-| More than 30 ingredients | 400 | Too many ingredients — keep it under 30 |
-| Non-string ingredient | 400 | All ingredients must be text |
-| Claude detects off-topic input | 400 | Claude's error message |
-| Claude API key missing or invalid | 500 | Something went wrong on our end — try again |
-| Claude API timeout (15s) | 503 | Our chef is busy — try again in a few seconds |
-| Claude returns non-JSON | 422 | The kitchen had a moment — please try again |
-| Claude returns JSON but fails schema | 422 | Recipe response was incomplete — try again |
-| Rate limit exceeded | 429 | Whoa, slow down! Give it a moment before trying again |
-| Network failure | — | Couldn't reach the server. Check your connection. |
-| Empty recipe results | — | Hmm, nothing came to mind. Try adding more ingredients! |
-| Unhandled exceptions | 500 | Something went wrong |
-
-All error banners include a **dismiss button** and clear automatically when the ingredient list is modified.
-
 ---
 
 ## Tech stack
